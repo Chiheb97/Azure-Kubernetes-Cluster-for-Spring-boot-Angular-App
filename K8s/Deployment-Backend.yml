@@ -1,0 +1,54 @@
+---
+apiVersion: apps/v1           # API version
+kind: Deployment              # Type of kubernetes resource
+metadata:
+  name: backend    # Name of the kubernetes resource
+  labels:                     # Labels that will be applied to this resource
+    app: backend
+spec:
+  replicas: 1                 # No. of replicas/pods to run in this deployment
+  selector:
+    matchLabels:              # The deployment applies to any pods mayching the specified labels
+      app: backend
+  template:                   # Template for creating the pods in this deployment
+    metadata:
+      labels:                 # Labels that will be applied to each Pod in this deployment
+        app: backend
+    spec:                     # Spec for the containers that will be run in the Pods
+      containers:
+      - name: backend
+        image: alaa1998/backend
+        imagePullPolicy: Always
+        ports:
+          - name: http
+            containerPort: 8084 # The port that the container exposes
+        resources:
+          limits:
+            cpu: 0.2
+            memory: "200Mi"
+      - name: front
+        image: chihebdocker1997/frontend
+        ports:
+          - name: http
+            containerPort: 80   # Should match the Port that the container listens on
+        resources:
+          limits:
+            cpu: 0.2
+            memory: "10Mi"
+       
+---
+apiVersion: v1                # API version
+kind: Service                 # Type of the kubernetes resource
+metadata:                     
+  name: backend    # Name of the kubernetes resource
+  labels:                     # Labels that will be applied to this resource
+    app: backend
+spec:                         
+             # The service will be exposed by opening a Port on each node and proxying it. 
+  selector:
+    app: backend   
+  ports:                      # Forward incoming connections on port 8084 to the target port 8084
+  - name: http
+    port: 8084
+    targetPort: 8084
+  type: LoadBalancer
