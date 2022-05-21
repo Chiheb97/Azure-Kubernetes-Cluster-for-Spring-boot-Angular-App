@@ -10,7 +10,7 @@ Create azure account (for this project i'm using azure student account)
 # Step 2:
 use "az login" command to connect to your account from terminal 
 # Step 3 :
-# Create terraform file and apply it using commands:
+ Create terraform file and apply it using commands:
  terraform init 
 terraform plan 
 terraform apply
